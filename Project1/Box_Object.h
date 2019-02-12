@@ -10,4 +10,7 @@ public :
 	void Update();
 	sf::RectangleShape shape;
 	b2Body* Body;
+	b2BodyDef BodyDef;
+	b2PolygonShape Shape;
+	b2FixtureDef FixtureDef;
 };

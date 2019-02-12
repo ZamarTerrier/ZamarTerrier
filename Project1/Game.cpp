@@ -69,9 +69,12 @@ void Game::Draw()
 void Game::InputMethod()
 {
 	sf::Mouse key;
-	//if (key.isButtonPressed(sf::Mouse::Button::Left)) {
-	//	b2Vec2 f = box.Body->GetWorldVector(b2Vec2(0, -5));
-	//	b2Vec2 p = box.Body->GetWorldPoint(b2Vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y));
-	//	box.Body->ApplyForce(f, p,false);
-	//}
+	if (key.isButtonPressed(sf::Mouse::Button::Left)) {
+
+		box.Body->SetLinearVelocity(b2Vec2(0, -50));
+		box.Body->SetAngularVelocity(0.1f);
+
+		triangle.Body->SetLinearVelocity(b2Vec2(0, -50));
+		triangle.Body->SetAngularVelocity(0.1f);
+	}
 }
