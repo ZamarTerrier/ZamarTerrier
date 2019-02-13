@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Box_Object.h"
 #include "Custom_Object.h"
+#include <math.h>
 
 const float SCALE = 32;
 
@@ -9,7 +10,7 @@ Box_Object plane;
 Custom_Object triangle;
 
 
-Game::Game():Gravity(0,10), world(Gravity), window(sf::VideoMode(1500, 1000, 64), "ZClub")
+Game::Game():Gravity(0,10), world(Gravity), window(sf::VideoMode(800, 600, 64), "ZClub")
 {
 	Initialize();
 }
@@ -57,6 +58,17 @@ void Game::Draw()
 
 		Update();
 
+		for (int i = 0; i < triangle.shape.getPointCount(); i++) {
+			sf::CircleShape s(5);
+			s.setFillColor(sf::Color::Green);
+			s.setOrigin(sf::Vector2f(5, 5));
+			sf::Vector2f origPos = triangle.shape.getPosition();
+			origPos.x = origPos.x + (triangle.shape.getPoint(i).x * (std::sin(triangle.shape.getRotation() / b2_pi)));
+			origPos.y = origPos.y + (triangle.shape.getPoint(i).y * (std::cos(triangle.shape.getRotation() / b2_pi)));
+			s.setPosition(origPos);
+			window.draw(s);
+		}
+
 		window.draw(box.shape);
 		window.draw(plane.shape);
 		window.draw(triangle.shape);
@@ -68,13 +80,24 @@ void Game::Draw()
 
 void Game::InputMethod()
 {
+	sf::Vector2i pixPos = sf::Mouse::getPosition(window);
+	sf::Vector2f pos = window.mapPixelToCoords(pixPos);
+
+	b2Vec2 dist;
+	dist.x = pos.x - box.Body->GetPosition().x;
+	dist.y = pos.y - box.Body->GetPosition().y;
+
+	b2Vec2 dist2;
+	dist2.x = pos.x - triangle.Body->GetPosition().x;
+	dist2.y = pos.y - triangle.Body->GetPosition().y;
+
 	sf::Mouse key;
 	if (key.isButtonPressed(sf::Mouse::Button::Left)) {
 
-		box.Body->SetLinearVelocity(b2Vec2(0, -50));
+		box.Body->SetLinearVelocity(dist);
 		box.Body->SetAngularVelocity(0.1f);
-
-		triangle.Body->SetLinearVelocity(b2Vec2(0, -50));
+		triangle.Body->SetLinearVelocity(dist2);
 		triangle.Body->SetAngularVelocity(0.1f);
+
 	}
 }

@@ -15,6 +15,7 @@ public :
 	b2Vec2 Gravity;
 	b2World world;
 	sf::RenderWindow window;
+
 private:
 	const float SCALE = 32;
 	Box_Object box;
